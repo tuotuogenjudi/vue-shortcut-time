@@ -29,18 +29,32 @@ import MyPlugin from 'vue-shortcut-time';
 Vue.use(MyPlugin);
 
 # 2. 页面使用
+
+```
 <sel-time :options = "options"
   v-model="defaultTime"
   v-on:receiveTimeInfo="receiveTimeInfo">
 </sel-time>
 
-
-options: {
-  isCustom: false, // false: 显示默认快捷选项;
-  color: #2e89ea, // false: 显示默认快捷选项;
-},
-defaultTime: '前15分钟', // 初始化快捷时间
-
+ data() {
+    return {
+      options: {
+        isCustom: false, // false: 显示默认快捷选项; true: 自定义自己的快捷时间
+        color: #2e89ea, // 按钮背景颜色;  
+      },
+      defaultTime: '前15分钟', // 初始化快捷时间
+      // isCustom为true是才起作用
+      list: [{
+        name: '前15分钟',
+        start: [15, 'm'],
+        type: 'currentEnd',
+      }, {
+        name: '前30分钟',
+        start: [30, 'm'],
+        type: 'currentEnd',
+      }],
+    }
+ },
 methods: {
   // 接收时间范围、时间间隔;
   receiveTimeInfo(info) {
@@ -48,3 +62,4 @@ methods: {
     console.log(info);
   },
 },
+```
