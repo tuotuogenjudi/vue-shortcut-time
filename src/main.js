@@ -3,7 +3,7 @@ import { Button, Select, Tabs, TabPane, Row, Col, Form, FormItem,
   TimeSelect, TimePicker, DatePicker, Tooltip } from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import moment from 'moment';
-import '@/assets/css/iconfont/iconfont.css';
+// import '@/assets/css/iconfont/iconfont.css';
 import App from './App';
 
 Vue.config.productionTip = false;

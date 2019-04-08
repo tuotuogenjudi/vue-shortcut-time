@@ -17,6 +17,7 @@
                     type="datetime"
                     placeholder="开始时间"
                     style="width: 100%;"
+                    value-format="timestamp"
                     :picker-options="pickerOptions0">
                   </el-date-picker>
                 </el-form-item>
@@ -26,6 +27,7 @@
                     type="datetime"
                     placeholder="结束时间"
                     style="width: 100%;"
+                    value-format="timestamp"
                     :picker-options="pickerOptions1">
                   </el-date-picker>
                 </el-form-item>
@@ -179,6 +181,7 @@ export default {
         firsttime: [
           {
             validator: (rule, value, callback) => {
+              alert('aaa');
               if (this.lasttime && this.firsttime) {
                 if (this.firsttime > this.lasttime) {
                   callback(new Error('开始时间不能大于结束时间'));
@@ -210,13 +213,18 @@ export default {
       pickerOptions0: {
         disabledDate: (time) => {
           if (this.lasttime) {
-            return time.getTime() >= this.$moment(this.lasttime).format('x');
+            return time.getTime() >= Number(this.lasttime);
           }
-          return false;
+          return time.getTime() >= this.$moment().format('x');
         },
       },
       pickerOptions1: {
-        disabledDate: time => time.getTime() <= this.firsttime - 8.64e7 || false,
+        disabledDate: (time) => {
+          if (this.firsttime) {
+            return time.getTime() <= Number(this.firsttime) - 8.64e7 || time.getTime() >= this.$moment().format('x');
+          }
+          return time.getTime() >= this.$moment().format('x');
+        },
       },
     };
   },
@@ -267,14 +275,16 @@ export default {
         }
         this.range = [Number(start), Number(end)];
         this.interval = util.getInterval((this.range[1] - this.range[0]) / 30);
-        this.sendMsgToParent({ range: this.range, interval: this.interval });
-        this.isShow = false;
       }
       if (type === 'precise') {
-        console.log('0-0-0-0');
-        console.log(item);
-        this.range = [Number(item.firsttime), Number(item.lasttime)];
+        const firsttimeTmp = Number(item.firsttime);
+        const lasttimeTmp = Number(item.lasttime);
+        this.btnActive = `${this.$moment(firsttimeTmp).format('YYYY-MM-DD HH:mm:ss')} - ${this.$moment(lasttimeTmp).format('YYYY-MM-DD HH:mm:ss')}`;
+        this.range = [firsttimeTmp, lasttimeTmp];
+        this.interval = util.getInterval((this.range[1] - this.range[0]) / 30);
       }
+      this.sendMsgToParent({ range: this.range, interval: this.interval });
+      this.isShow = false;
     },
     /**
      * 回传给父元素
@@ -292,8 +302,9 @@ export default {
 };
 </script>
 <style>
+  @import '../../assets/css/iconfont/iconfont.css';
   .time-wrap{
-    position: relative;
+    /* position: relative; */
   }
   .time-wrap .tab-close {
     cursor: pointer;
@@ -332,7 +343,9 @@ export default {
     position: absolute;
     right: 0;
     width: 100%;
-    margin-top: 20px;
+    margin-top: 0;
+    line-height: 29px;
+    color: #000;
     z-index: 100000;
   }
   .el-tabs {
