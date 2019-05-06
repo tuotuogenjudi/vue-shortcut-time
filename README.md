@@ -33,6 +33,7 @@ Vue.use(MyPlugin);
 ```
 <sel-time :options = "options"
   v-model="defaultTime"
+  ref="selTime"
   v-on:receiveTimeInfo="receiveTimeInfo">
 </sel-time>
 
@@ -56,14 +57,18 @@ Vue.use(MyPlugin);
     }
  },
 methods: {
-  // 接收时间范围、时间间隔;
+  // 接收时间范围、时间间隔、时间显示文本;
   receiveTimeInfo(info) {
     console.log('0-0-0-0-');
     console.log(info);
+    // 时间范围： info.range;
+    // 时间间隔： info.interval;
+    // 时间文本:  info.textTime;
   },
-  // 点击图表改变时间范围时重新获取全局时间
+  // 点击图表改变时间范围时重新获取全局时间,改变插件时间
   changeTime() {
-    
+    // start 、 end 为时间戳
+    this.$refs.selTime.clickTime([start, end], 'precise');
   },
 },
 ```
