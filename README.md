@@ -24,7 +24,7 @@ For a detailed explanation on how things work, check out the [guide](http://vuej
 # 1. 安装
 npm install vue-shortcut-time --save
 
-import MyPlugin from 'vue-shortcut-time';
+import MyPlugin from 'vue-shortcut-time/src/plugin/main';
 
 Vue.use(MyPlugin);
 
@@ -60,6 +60,10 @@ methods: {
   receiveTimeInfo(info) {
     console.log('0-0-0-0-');
     console.log(info);
+  },
+  // 点击图表改变时间范围时重新获取全局时间
+  changeTime() {
+    
   },
 },
 ```

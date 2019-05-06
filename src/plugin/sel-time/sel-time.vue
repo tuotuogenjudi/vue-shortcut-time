@@ -33,7 +33,7 @@
                 </el-form-item>
                 <el-button size="small" :disabled="firsttime === '' || lasttime === ''"
                   type="primary"
-                  @click="clickTime({ firsttime, lasttime }, 'precise')">
+                  @click="clickTime([firsttime, lasttime], 'precise')">
                   查询
                 </el-button>
               </el-form>
@@ -173,6 +173,7 @@ export default {
       }],
       btnActive: '前15分钟',
       range: [],
+      textTime: '',
       interval: '30s',
       // 精确时间选择
       firsttime: '',
@@ -181,7 +182,6 @@ export default {
         firsttime: [
           {
             validator: (rule, value, callback) => {
-              alert('aaa');
               if (this.lasttime && this.firsttime) {
                 if (this.firsttime > this.lasttime) {
                   callback(new Error('开始时间不能大于结束时间'));
@@ -275,15 +275,17 @@ export default {
         }
         this.range = [Number(start), Number(end)];
         this.interval = util.getInterval((this.range[1] - this.range[0]) / 30);
+        this.textTime = `${this.$moment(this.range[0]).format('YYYY-MM-DD HH:mm:ss')}-${this.$moment(this.range[1]).format('YYYY-MM-DD HH:mm:ss')}`;
       }
       if (type === 'precise') {
-        const firsttimeTmp = Number(item.firsttime);
-        const lasttimeTmp = Number(item.lasttime);
+        const firsttimeTmp = Number(item[0]);
+        const lasttimeTmp = Number(item[1]);
         this.btnActive = `${this.$moment(firsttimeTmp).format('YYYY-MM-DD HH:mm:ss')} - ${this.$moment(lasttimeTmp).format('YYYY-MM-DD HH:mm:ss')}`;
         this.range = [firsttimeTmp, lasttimeTmp];
         this.interval = util.getInterval((this.range[1] - this.range[0]) / 30);
+        this.textTime = `${this.$moment(this.range[0]).format('YYYY-MM-DD HH:mm:ss')}-${this.$moment(this.range[1]).format('YYYY-MM-DD HH:mm:ss')}`;
       }
-      this.sendMsgToParent({ range: this.range, interval: this.interval });
+      this.sendMsgToParent({ range: this.range, interval: this.interval, textTime: this.textTime });
       this.isShow = false;
     },
     /**
@@ -304,7 +306,7 @@ export default {
 <style>
   @import '../../assets/css/iconfont/iconfont.css';
   .time-wrap{
-    /* position: relative; */
+    position: relative;
   }
   .time-wrap .tab-close {
     cursor: pointer;
@@ -343,10 +345,10 @@ export default {
     position: absolute;
     right: 0;
     width: 100%;
-    margin-top: 0;
+    margin-top: 10px;
     line-height: 29px;
     color: #000;
-    z-index: 100000;
+    z-index: 1001;
   }
   .el-tabs {
     position: relative;

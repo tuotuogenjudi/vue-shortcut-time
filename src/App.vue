@@ -5,6 +5,7 @@
         <el-col :span="12">test-logo</el-col>
         <el-col :span="12">
           <sel-time :options = "options"
+            ref="selTime"
             :defaultTime="defaultTime"
             v-on:receiveTimeInfo="receiveTimeInfo">
           </sel-time>
@@ -15,6 +16,8 @@
       <div>时间范围：{{ range }}</div>
       <div>时间间隔：{{ interval }}</div>
     </div>
+
+    <div style="color: #2e89ea; cursor: pointer;" @click="getTime">更改时间(前10分钟)</div>
   </div>
 </template>
 
@@ -32,7 +35,7 @@ export default {
         isCustom: false, // 默认false
         color: '#2e89ea',
       },
-      defaultTime: '前15分钟',
+      defaultTime: '前24小时',
       list: [{
         name: '前15分钟',
         start: [15, 'm'],
@@ -50,10 +53,15 @@ export default {
     receiveTimeInfo(info) {
       this.range = info.range;
       this.interval = info.interval;
+      console.log(info);
+    },
+    getTime() {
+      const start = this.$moment().subtract(10, 'm').format('x');
+      const end = this.$moment().format('x');
+      this.$refs.selTime.clickTime([start, end], 'precise');
     },
   },
   mounted() {
-    // this.
   },
 };
 </script>
