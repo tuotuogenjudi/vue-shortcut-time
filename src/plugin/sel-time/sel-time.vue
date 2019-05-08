@@ -316,9 +316,6 @@ export default {
 </script>
 <style>
   @import '../../assets/css/iconfont/iconfont.css';
-  .time-wrap{
-    position: relative;
-  }
   .time-wrap .tab-close {
     cursor: pointer;
     position: absolute;
