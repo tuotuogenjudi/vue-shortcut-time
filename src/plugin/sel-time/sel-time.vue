@@ -178,6 +178,7 @@ export default {
       // 精确时间选择
       firsttime: '',
       lasttime: '',
+      freshTime: '',
       timeFormRules: {
         firsttime: [
           {
@@ -254,6 +255,10 @@ export default {
      * currentEnd: 从过去时间截止到现在时间
      * beforeEndOne: 之前的某一天
      * beforeEndMulti: 之前的很多天
+     * type: shortcut: 快捷时间
+     *       precise： 具体时间
+     * freshTime: 页面请求当前方法时可将参数带回获取最新时间信息
+     * textTime: 文字时间, 两种形式 1: 前15分钟  2. 2019-05-08 11:22:22 - 2019-05-08 13:37:22
      */
     clickTime(item, type) {
       if (type === 'shortcut') {
@@ -285,7 +290,13 @@ export default {
         this.interval = util.getInterval((this.range[1] - this.range[0]) / 30);
         this.textTime = `${this.$moment(this.range[0]).format('YYYY-MM-DD HH:mm:ss')}-${this.$moment(this.range[1]).format('YYYY-MM-DD HH:mm:ss')}`;
       }
-      this.sendMsgToParent({ range: this.range, interval: this.interval, textTime: this.textTime });
+      this.freshTime = { item, type };
+      this.sendMsgToParent({
+        range: this.range,
+        interval: this.interval,
+        textTime: this.textTime,
+        freshTime: this.freshTime,
+      });
       this.isShow = false;
     },
     /**
