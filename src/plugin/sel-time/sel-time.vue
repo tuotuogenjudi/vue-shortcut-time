@@ -229,7 +229,7 @@ export default {
       },
     };
   },
-  mounted() {
+  created() {
     if (this.defaultTime) {
       this.btnActive = this.defaultTime;
       this.shortcutList.forEach((key) => {
@@ -289,6 +289,38 @@ export default {
         this.range = [firsttimeTmp, lasttimeTmp];
         this.interval = util.getInterval((this.range[1] - this.range[0]) / 30);
         this.textTime = `${this.$moment(this.range[0]).format('YYYY-MM-DD HH:mm:ss')}-${this.$moment(this.range[1]).format('YYYY-MM-DD HH:mm:ss')}`;
+      }
+      const dTmp = ['最近7天', '最近30天', '本周', '上周', '本月', '上个月', '前60天'];
+      const dTmp2 = ['前90天'];
+      const tmpM = ['前6个月', '前1年', '前2年', '去年', '今年', '前5年'];
+      const hTmp = ['前24小时', '今天', '昨天', '前天', '上周的今天'];
+      const mTmp30 = ['前12小时'];
+      const mTmp5 = ['前4小时'];
+      const sTmp30 = ['前15分钟'];
+      const mTmp1 = ['前30分钟', '前1小时'];
+      if (dTmp.includes(item.name)) {
+        this.interval = '1d';
+      }
+      if (dTmp2.includes(item.name)) {
+        this.interval = '2d';
+      }
+      if (tmpM.includes(item.name)) {
+        this.interval = '1M';
+      }
+      if (hTmp.includes(item.name)) {
+        this.interval = '1h';
+      }
+      if (mTmp30.includes(item.name)) {
+        this.interval = '30m';
+      }
+      if (mTmp5.includes(item.name)) {
+        this.interval = '5m';
+      }
+      if (mTmp1.includes(item.name)) {
+        this.interval = '1m';
+      }
+      if (sTmp30.includes(item.name)) {
+        this.interval = '30s';
       }
       this.freshTime = { item, type };
       this.sendMsgToParent({
